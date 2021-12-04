@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # part1.py
 
@@ -101,7 +101,8 @@ def read_numbers(lines: list) -> list:
     return [int(i) for i in lines[0].split(',')]
 
 
-def check_win_grilles(grilles, marks) -> bool:
+def check_win_grilles(grilles, marks) -> int:
+    """ retourne le no de la premiere grille gagnante ou -1"""
     for no, grille in grilles.items():
         if check_win_grille(grille, marks):
             return no
@@ -119,12 +120,12 @@ def check_win_grille(grille: list, marks) -> bool:
     return False
 
 
-def check_rows(grille, marks) -> bool:
+def check_cols(grille, marks) -> bool:
     tgrille = transpose(grille)
-    return check_cols(tgrille, marks)
+    return check_rows(tgrille, marks)
 
 
-def check_cols(grille, marks):
+def check_rows(grille, marks):
     for line in grille:
         if check_row(line, marks):
             return True
@@ -148,8 +149,7 @@ def transpose(grille: list) -> list:
     for i in range(len(grille[0])):
         tgrille.append([])
 
-    for i, line in enumerate(grille):
-        # print(i, line)
+    for line in grille:
         for n, e in enumerate(line):
             # print("i {}, n {}".format(i ,n))
             tgrille[n].append(e)

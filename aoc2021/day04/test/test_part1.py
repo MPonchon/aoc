@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # test_part1.py
 
@@ -14,7 +14,7 @@ from part1 import read_grilles, read_numbers, sol, check_win_grille, transpose
 class TestPart1(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.ptf_exemple = os.path.join(ROOT_DIR, "aoc2021\day04\exemple.txt")
+        self.ptf_exemple = os.path.join(loader.ROOT_DIR, "aoc2021\day04\exemple.txt")
         self.exemple  = loader.load_data(self.ptf_exemple)
 
 
@@ -37,7 +37,7 @@ class TestPart1(unittest.TestCase):
         data = read_numbers(self.exemple)
         print("data:", data)
 
-    @unittest.skip("reason for skipping")
+    # @unittest.skip("reason for skipping")
     def test_check_win_grille_row(self):
         print("* test_check_win_grille_row")
         # nums = read_numbers(self.exemple)
@@ -78,7 +78,7 @@ class TestPart1(unittest.TestCase):
         result = sol(grilles, nums)
 
 
-    @unittest.skip("reason for skipping")
+    # @unittest.skip("reason for skipping")
     def test_transpose(self):
         print("* test_transpose")
 

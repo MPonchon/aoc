@@ -5,5 +5,7 @@ tcl*
 *.pyc
 utils/make_day.py
 temp*
+!template-day
+
 notes*
 sh*

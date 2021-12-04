@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# https://adventofcode.com/
+
 # part1.py
 
 from utils import loader
