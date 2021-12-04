@@ -13,7 +13,7 @@ sys.path.append(path)
 import os
 from utils import loader
 
-from part1 import ROOT_DIR, read_grilles, read_numbers, sol, mark_grille, mark_grilles, check_win_grille, check_win_grilles
+from part1 import ROOT_DIR, read_grilles, read_numbers, sol, check_win_grille, check_win_grilles, transpose
 
 
 class TestPart1(unittest.TestCase):
@@ -43,43 +43,23 @@ class TestPart1(unittest.TestCase):
         print("data:", data)
 
 
-    # @unittest.skip("reason for skipping")
-    def test_mark_grille(self):
-        print("* test_mark_grilles")
-        nums = read_numbers(self.exemple)
-        # print("nums:", nums)
-        data = loader.load_data(self.ptf_exemple)
-        grilles = read_grilles(data[1:])
-
-        grille = grilles[1]
-        mark_grille(grille, 22)
-        mark_grille(grille, 13)
-        print("grille:", grille)
-        print("grille:", grilles[1])
-
-
     @unittest.skip("reason for skipping")
-    def test_mark_grilles(self):
-        print("* test_mark_grilles")
-        nums = read_numbers(self.exemple)
-        # print("nums:", nums)
-        data = loader.load_data(self.ptf_exemple)
-        grilles = read_grilles(data[1:])
-        result = mark_grilles(grilles, 22)
-        print("grilles:", grilles)
-
-
-    @unittest.skip("reason for skipping")
-    def test_check_win_grille(self):
-        print("* test_check_win_grille")
+    def test_check_win_grille_row(self):
+        print("* test_check_win_grille_row")
         # nums = read_numbers(self.exemple)
         # print("nums:", nums)
         data = loader.load_data(self.ptf_exemple)
         grilles = read_grilles(data[1:])
-        mark_grilles(grilles, 22)
-        result = check_win_grille(grilles[1])
-        print("grilles:", grilles[1])
-
+        grille = grilles[1]
+        marks = set()
+        marks.add(22)
+        marks.add(13)
+        marks.add(17)
+        marks.add(11)
+        self.assertFalse(check_win_grille(grille, marks))
+        marks.add(0)
+        self.assertTrue(check_win_grille(grille, marks))
+        
 
     @unittest.skip("reason for skipping")
     def test_check_win_grilles(self):
@@ -90,23 +70,8 @@ class TestPart1(unittest.TestCase):
         grilles = read_grilles(data[1:])
         # print("grilles:", grilles[1])
         # result = check_win_grille(grilles)
-        mark_grilles(grilles, 22)
-        mark_grilles(grilles, 13)
-        mark_grilles(grilles, 17)
+
         print("grilles:", grilles[1])
-        # print("result:", result)
-        # mark_grilles(grilles, 13)
-        # print("grilles:", grilles[1])
-        # print("result:", result)
-        # mark_grilles(grilles, 17)
-        # mark_grilles(grilles, 11)
-        # mark_grilles(grilles, 0)
-        # print("grilles:", grilles[1])
-        # print("result:", result)
-
-        # # result = sol(grilles, nums)
-
-
 
 
     @unittest.skip("reason for skipping")
@@ -117,3 +82,21 @@ class TestPart1(unittest.TestCase):
         data = loader.load_data(self.ptf_exemple)
         grilles = read_grilles(data[1:])
         result = sol(grilles, nums)
+
+
+    @unittest.skip("reason for skipping")
+    def test_transpose(self):
+        print("* test_transpose")
+
+        grille = [
+            ['a', 'b', 'c'],
+            ['d', 'e', 'f'],
+            ['g', 'h', 'i']
+        ]
+        # tgrille = transpose(grille)
+        # print("tgrille:", tgrille)
+        self.assertEqual(
+            [['a', 'd', 'g'], ['b', 'e', 'h'], ['c', 'f', 'i']],
+            transpose(grille)
+            )
+

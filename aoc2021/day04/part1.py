@@ -90,7 +90,7 @@ def read_grilles(lines :list) -> list:
             ngrille = []
             for gline in grille:
                 temp = gline.split(' ')
-                temp = [(int(e), False) for e in temp if e != '' ]
+                temp = [int(e) for e in temp if e != '' ]
                 ngrille.append(temp)
                 # ngrille = [int(i) for i in gline[0].split(' ')]
             # print("no_grille", no_grille)
@@ -106,63 +106,115 @@ def read_numbers(lines: list) -> list:
     return [int(i) for i in lines[0].split(',')]
 
 
-def mark_grilles(grilles, n):
+def check_win_grilles(grilles, marks) -> bool:
     for no, grille in grilles.items():
-        mark_grille(grille, n)
+        if check_win_grille(grille, marks):
+            return no
+    return -1
 
 
-def mark_grille(grille, n) -> None:
+def check_win_grille(grille: list, marks) -> bool:
+
+    if check_rows(grille, marks):
+        return True
+
+    if check_cols(grille, marks):
+        return True
+
+    return False
+
+
+
+
+def check_rows(grille, marks) -> bool:
+    tgrille = transpose(grille)
+    return check_cols(tgrille, marks)
+
+
+def check_cols(grille, marks):
+    for line in grille:
+        if check_row(line, marks):
+            return True
+    return False
+
+
+def check_row(line: list, marks: set) -> bool:
+    # print('check row, line:{}'.format(line))
+    nb_mark = 0
+    for num in line:
+        if num in marks:
+            nb_mark += 1  # print("nb_mark: ", nb_mark)
+    if nb_mark == 5:
+        return True
+    return False
+
+
+
+
+def transpose(grille: list) -> list:
     # print("grille:", grille)
-    for no_line, line in enumerate(grille):
-        # print("line: ", line)
-        nline = []
-        for tup in line:
-            num = tup[0]
-            if num == n:
-                tup = (n, True)
-            nline.append(tup)
-        grille[no_line] = nline
+    tgrille = []
+    for i in range(len(grille[0])):
+        tgrille.append([])
 
-def check_win_grilles(grilles) -> bool:
-    for no, grille in grilles.items():
-        # mark grille
-        # print("grille no:", no)
-        # print("grille:", grille)
-        if check_win_grille(grille):
-            return True
-    return False
+    for i, line in enumerate(grille):
+        # print(i, line)
+        for n, e in enumerate(line):
+            # print("i {}, n {}".format(i ,n))
+            tgrille[n].append(e)
+            # print("tgrillede i : ", tgrille[i+n], e)
+    return tgrille
 
-def check_win_grille(grille: list) -> bool:
-    for no_line, line in enumerate(grille):
-        # check row
-        print("line: ", line)
-        nb_mark = 0
-        for num, mark in line:
-            if mark:
-                nb_mark += 1
-        print("nb_mark: ", nb_mark)
-        if nb_mark == 5:
-            return True
-    return False
 
-def sol(grilles, numbers) -> int:
+def sum_unmarked(grille, marks) -> int:
+    sum = 0
+    for line in grille:
+        for num in line:
+            # print("num: ", num)
+            if num not in marks:
+                sum += num
+    return sum
 
-    marks = set()
+def sol(grilles, numbers, marks) -> tuple:
+    """ retourn no de grille, numero sorti"""
+    
     for n in numbers:
+        print(n)
         if n in marks:
             continue
         marks.add(n)
 
-        if  check_win_grille(grilles):
-            print("yes")
+        no = check_win_grilles(grilles, marks)
+        if no != -1:
+            # print(no)
+            # print(grilles[no])
+            # sum = sum_unmarked(grilles[no], marks)
+            # print(n, sum)
+            # return n * sum
+            return n, no
 
-    return 0
+    return (0,0)
 
 if __name__ == "__main__":
     print("AOC: part1")
 
 
     # get data
-    path_to_file = os.path.join(os.getcwd(), 'data.txt')
+    # path_to_file = os.path.join(os.getcwd(), 'data.txt')
+    path_to_file = os.path.join(os.getcwd(), 'exemple.txt')
     data = loader.load_data(path_to_file)
 
+    nums = read_numbers(data)
+    grilles = read_grilles(data[1:])
+
+    marks = set()
+    n, no = sol(grilles, nums, marks)
+    sum = sum_unmarked(grilles[no], marks)
+    print(n, sum)
+    result =  n * sum
+
+    print("result:", result)
+
+    # your answer is too low
+    # 30 859
+    # result: 25770

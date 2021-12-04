@@ -1,2 +1,4 @@
 *.pyc
 utils/make_day.py
+temp*
+notes*
