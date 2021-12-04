@@ -67,17 +67,11 @@ To begin, get your puzzle input.
 """
 import os
 
-global ROOT_DIR
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-import sys
-
-path =  "F:\\Zone Sauvegarde\\Documents\\Documents Marc\\Programmation\\github-MPonchon\\aoc"
-sys.path.append(path)
 
 from utils import loader
-# from loader import load_data, loader
 
-def read_grilles(lines :list) -> list:
+
+def read_grilles(lines: list) -> list:
     lines.append("")  # ajout derniere grille
     grilles = {}
     grille = []
@@ -90,7 +84,7 @@ def read_grilles(lines :list) -> list:
             ngrille = []
             for gline in grille:
                 temp = gline.split(' ')
-                temp = [int(e) for e in temp if e != '' ]
+                temp = [int(e) for e in temp if e != '']
                 ngrille.append(temp)
                 # ngrille = [int(i) for i in gline[0].split(' ')]
             # print("no_grille", no_grille)
@@ -101,6 +95,7 @@ def read_grilles(lines :list) -> list:
             continue
         grille.append(line)
     return grilles
+
 
 def read_numbers(lines: list) -> list:
     return [int(i) for i in lines[0].split(',')]
@@ -124,8 +119,6 @@ def check_win_grille(grille: list, marks) -> bool:
     return False
 
 
-
-
 def check_rows(grille, marks) -> bool:
     tgrille = transpose(grille)
     return check_cols(tgrille, marks)
@@ -147,8 +140,6 @@ def check_row(line: list, marks: set) -> bool:
     if nb_mark == 5:
         return True
     return False
-
-
 
 
 def transpose(grille: list) -> list:
@@ -175,9 +166,10 @@ def sum_unmarked(grille, marks) -> int:
                 sum += num
     return sum
 
+
 def sol(grilles, numbers, marks) -> tuple:
     """ retourn no de grille, numero sorti"""
-    
+
     for n in numbers:
         print(n)
         if n in marks:
@@ -193,14 +185,12 @@ def sol(grilles, numbers, marks) -> tuple:
             # return n * sum
             return n, no
 
-    return (0,0)
+    return (0, 0)
+
 
 if __name__ == "__main__":
     print("AOC: part1")
 
-
-    # get data
-    # path_to_file = os.path.join(os.getcwd(), 'data.txt')
     path_to_file = os.path.join(os.getcwd(), 'exemple.txt')
     data = loader.load_data(path_to_file)
 
@@ -211,7 +201,7 @@ if __name__ == "__main__":
     n, no = sol(grilles, nums, marks)
     sum = sum_unmarked(grilles[no], marks)
     print(n, sum)
-    result =  n * sum
+    result = n * sum
 
     print("result:", result)
 

@@ -6,22 +6,17 @@
 
 import unittest
 
-import sys
-path =  "F:\\Zone Sauvegarde\\Documents\\Documents Marc\\Programmation\\github-MPonchon\\aoc"
-sys.path.append(path)
-
 import os
 from utils import loader
-
-from part1 import ROOT_DIR, read_grilles, read_numbers, sol, check_win_grille, check_win_grilles, transpose
+from part1 import read_grilles, read_numbers, sol, check_win_grille, transpose
 
 
 class TestPart1(unittest.TestCase):
 
-
     def setUp(self) -> None:
-        self.ptf_exemple = os.path.join(ROOT_DIR, "exemple.txt")
+        self.ptf_exemple = os.path.join(ROOT_DIR, "aoc2021\day04\exemple.txt")
         self.exemple  = loader.load_data(self.ptf_exemple)
+
 
     # @unittest.skip("reason for skipping")
     def test_Par_test(self):
@@ -41,7 +36,6 @@ class TestPart1(unittest.TestCase):
         print("* test_read_numbers")
         data = read_numbers(self.exemple)
         print("data:", data)
-
 
     @unittest.skip("reason for skipping")
     def test_check_win_grille_row(self):

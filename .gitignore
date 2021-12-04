@@ -1,3 +1,7 @@
+Include*
+Lib*
+Scripts*
+tcl*
 *.pyc
 utils/make_day.py
 temp*

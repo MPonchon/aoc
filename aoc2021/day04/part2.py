@@ -52,14 +52,8 @@ Figure out which board will win last. Once it wins, what would its final score b
 """
 import os
 
-global ROOT_DIR
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-import sys
-
-path =  "F:\\Zone Sauvegarde\\Documents\\Documents Marc\\Programmation\\github-MPonchon\\aoc"
-sys.path.append(path)
-
-from part1 import *
+from utils import loader
+from part1 import check_win_grille, read_numbers, read_grilles, sum_unmarked
 
 
 def last_win(grilles: dict, numbers: list, marks: set) -> int:
@@ -79,7 +73,6 @@ def last_win(grilles: dict, numbers: list, marks: set) -> int:
                 # print("key: {}, boad_won:{}".format(key, boad_won))
                 if key not in boad_won:
                     # print("key: {} not in board".format(key))
-                    # print("len(boad_won):{}, len(grilles.keys()):{}".format(len(boad_won), len(grilles.keys())) )
                     if len(boad_won) == len(grilles.keys()) - 1:
                         # print("->boad_won:", boad_won, n , key)
                         return key, n
@@ -90,7 +83,7 @@ def last_win(grilles: dict, numbers: list, marks: set) -> int:
 if __name__ == "__main__":
     print("AOC: part2")
 
-   # get data
+    # get data
     path_to_file = os.path.join(os.getcwd(), 'data.txt')
     # path_to_file = os.path.join(os.getcwd(), 'exemple.txt')
     data = loader.load_data(path_to_file)
