@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# utils.py
+# loader.py
 
 def load_data(path_to_file: str) -> list:
     flines = []
