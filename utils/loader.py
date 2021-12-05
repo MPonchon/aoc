@@ -16,6 +16,7 @@ ROOT_DIR = get_project_root("aoc")
 
 
 def load_data(path_to_file: str) -> list:
+    print(f"load_data from {path_to_file}")
     flines = []
     with open(path_to_file, 'r') as f:
         flines = f.readlines()
