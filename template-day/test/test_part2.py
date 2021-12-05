@@ -11,7 +11,7 @@ from utils import loader
 from part1 import *
 
 
-class TestPart1(unittest.TestCase):
+class TestPart2(unittest.TestCase):
 
     def setUp(self):
         self.exemple = loader.load_data("exemple.txt")

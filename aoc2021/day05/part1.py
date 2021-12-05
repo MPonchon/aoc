@@ -75,6 +75,13 @@ At how many points do at least two lines overlap?
 
 
 """
+
+def normalize_x(tup0, tup1):
+    if tup0[0] > tup1[0]:
+        return (tup1, tup0)
+    return (tup0, tup1)
+
+
 def get_thlines(lines: list, filtreHV) -> list:
 
     def tupize(entree: str):
@@ -84,7 +91,12 @@ def get_thlines(lines: list, filtreHV) -> list:
     mydata = []
     for line in lines:
         parts = line.split('->')
-        tup = (tupize(parts[0]), tupize(parts[1]))
+        tup0 = tupize(parts[0]) 
+        tup1 = tupize(parts[1])
+
+        tup = normalize_x(tup0, tup1)
+
+        # tup = (tupize(parts[0]), tupize(parts[1]))
         if filtreHV:
             if tup[0][0] != tup[1][0] and tup[0][1] != tup[1][1]:
                 continue
@@ -161,17 +173,25 @@ def point_in_line_xy(x, y, xl0, yl0, xl1, yl1) -> bool:
 
 def compute_points(thlines: list, xmax, ymax):
     points = {}
-    # debug_list= []
-    for x in range(0, xmax+1):
-        for y in range(0, ymax+1):
-            key = f"{x}#{y}"
-            for thline in thlines:
+    debug_list= []
+
+    for thline in thlines:
+        # for x in range(thline[0][0], thline[1][0] + 1):
+        for x in range(0, xmax + 1):
+            if not check_one_coord(x, thline[0][0], thline[1][0]):
+                continue
+            for y in range(0, ymax + 1):
+                if not check_one_coord(y, thline[0][1], thline[1][1]):
+                    continue
+
+                key = f"{x}#{y}"
+
                 # print(f"{x}, {y}, thline: {thline}")
                 # print(f" point({x}, {y} ? in {thline}.")
-                # inside = False
+                inside = False
                 # if point_in_line((x,y), thline):
                 if point_in_line_xy(x, y, thline[0][0], thline[0][1], thline[1][0] ,thline[1][1]):
-                    # inside = True
+                    inside = True
                     if key not in points:
                         points[key] = 1
                     else:
@@ -180,11 +200,11 @@ def compute_points(thlines: list, xmax, ymax):
                 # else:
                 #     # print(f" point({x}, {y} NOT in {thline}.")
                 #     pass
-                # msg = f"{x}, {y}, thline: {thline} ; inside: {inside}"
-                # debug_list.append(msg)
-    # with open("debug-th.txt", "w+") as f:
-    #     for line in debug_list:
-    #         f.write(line + '\n')
+                msg = f"{x}, {y}, thline: {thline} ; inside: {inside}"
+                debug_list.append(msg)
+    with open("debug-th-part1.txt", "w+") as f:
+        for line in debug_list:
+            f.write(line + '\n')
     return points
 
 
@@ -207,11 +227,13 @@ if __name__ == "__main__":
     data = loader.load_data(path_to_file)
 
     thlines = get_thlines(data, True)
-
     xmax, ymax = get_maxi(thlines)
+
+    xmax = ymax = 200
+    
     print(f"xmax: {xmax}, ymax:{ymax}.")
     print(f"nb lines: {len(thlines)}.")
-    xmax = ymax = 200
+
 
     start = time.time()
     points = compute_points(thlines, xmax, ymax)
@@ -223,9 +245,9 @@ if __name__ == "__main__":
 
     tot = count_max_point(points)
     print(f"nb points: {tot}.")
-    # nb points: 5608.
+    # nb points: 5608.      elapsed:13.833225965499878.
 
-    # 200 : 70          9.30
+    # 200 : 70          9.30        0.028
     # 150 : 7   , time: 5.16
     # 100 : 2           2.26
 

@@ -21,15 +21,18 @@ class TestPart1(unittest.TestCase):
     def test_exemple(self):
         print("* test_exemple")
 
-    @unittest.skip("reason for skipping")
+    # @unittest.skip("reason for skipping")
     def test_get_thlines(self):
         print("* test_get_thlines")
         
         maliste = get_thlines(self.exemple, True)
-        # print(maliste)
+        print(maliste)
         self.assertEqual( ((0, 9), (5, 9)), maliste[0])
 
-    # @unittest.skip("reason for skipping")
+        print(sorted(maliste))
+
+
+    @unittest.skip("reason for skipping")
     def test_get_maxi(self):
         print("* test_get_maxi")
         
@@ -61,7 +64,7 @@ class TestPart1(unittest.TestCase):
 
 
 
-    # @unittest.skip("reason for skipping")
+    @unittest.skip("reason for skipping")
     def test_point_in_line(self):
         print("* test_point_in_line")
         
