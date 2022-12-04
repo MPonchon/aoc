@@ -3,8 +3,12 @@ Lib*
 Scripts*
 tcl*
 *.pyc
+*.7z
 utils/make_day.py
+venv
 
+**/exemple*
+**/input/*
 !template-day
 temp/*
 notes*
