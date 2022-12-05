@@ -1,13 +1,13 @@
 #! /bin/env bash
 day=$1
 if [[ ${day:0:3} != "day" ]]; then
-    echo "aoc : param must start whith 'day' !"
-    exit
+    echo "aoc : please issue a param that start whith 'day' !"
+    exit 1
 fi
 
 cwd=$(pwd)
 [[ "${cwd##*/aoc}" == "/2022" ]] || {
-    echo "$cwd pas bon";
+    echo "the path $cwd must be in /2022";
     exit 1;
 }
 
