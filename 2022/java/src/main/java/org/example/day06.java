@@ -4,10 +4,10 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Main {
+public class day06 {
 
-//    final static String filedata = "exemple.txt";
-    final static String filename = "input.txt";
+    //    final static String filedata = "exemple_d06.txt";
+    final static String filename = "input_d06.txt";
     final static String path_to_file = Paths.get(
             System.getProperty("user.dir"),
             "data",
@@ -18,6 +18,15 @@ public class Main {
         System.out.println(ch);
     }
 
+    protected static boolean markerFound(HashMap <String, Integer> counter) {
+        for (String chaine : counter.keySet()) {
+            Integer count = counter.get(chaine);
+            if (count > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static int find_marker(String input, int longueur) {
         int nb_chars = 0;
@@ -28,37 +37,20 @@ public class Main {
             deque.addFirst(ch);
             nb_chars++;
             if (deque.size() >= longueur) {
-//                System.out.println("nb_chars: "+ nb_chars + ", deque: "+ deque.toString());
-
                 HashMap <String, Integer> counter = new HashMap<>();
                 deque.forEach( c1 -> {
                     counter.put((String) c1 , counter.getOrDefault(c1, 0) + 1);
-
                 });
-                boolean marker = true;
-                for (String chaine : counter.keySet()) {
-                    Integer count = counter.get(chaine);
-                    if (count > 1) {
-                        marker = false;
-                        break;
-                    }
-                }
-                if (marker) {
+                if (markerFound(counter)) {
                     return nb_chars;
                 }
-//                System.out.println("counter: "+ counter);
                 String c2 = (String) deque.pollLast();
-//                System.out.println("c2: "+ c2 + ", deque: "+ deque.toString());
-
             }
-
-
         }
         throw new IllegalArgumentException("find_marker: out of chars");
-//        return -1;
     }
 
-    public static void main(String[] args) {
+    public static void run() {
 //        System.out.println("Hello world!");
         print("path_to_file: "+ path_to_file);
 
@@ -76,9 +68,8 @@ public class Main {
             }
         }
         catch (FileNotFoundException e) {
+            System.out.println("Exception: " + e.getMessage());
             scanner.close();
         }
-
-
     }
 }

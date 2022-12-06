@@ -1,9 +1,12 @@
+package org.example;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.example.Main.find_marker;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.example.day06.find_marker;
 
-class mainTestTest {
+class day06Test {
+
     @Test
     void testFindMarker() {
         assertEquals(7 , find_marker( "mjqjpqmgbljsphdztnvjfqwrcgsmlb", 4));
