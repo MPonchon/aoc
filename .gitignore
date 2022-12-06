@@ -7,8 +7,8 @@ tcl*
 utils/make_day.py
 venv
 
-**/test*
-**/exemple*
+test*.txt
+exemple.txt
 **/input*
 !template-day
 temp/*
