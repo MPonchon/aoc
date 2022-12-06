@@ -67,6 +67,7 @@ def main():
         for line in f.readlines():
             line = line.strip("\n")
             if line.startswith("move"):
+                # add instructions nb, from, to
                 commands.append(
                     [int(i) for i in line
                         .replace('move', '')

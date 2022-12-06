@@ -42,9 +42,12 @@ def main():
 
     file_data = "exemple.txt"
     # file_data = "input.txt"
-    
+
     with open(file_data, 'r') as f:
         lines = [line.strip("\n") for line in f.readlines()]
+
+    # TODO: your code here
+
 
     return reponse1, reponse2
 
