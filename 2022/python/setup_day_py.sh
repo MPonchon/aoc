@@ -6,8 +6,8 @@ if [[ ${day:0:3} != "day" ]]; then
 fi
 
 cwd=$(pwd)
-[[ "${cwd##*/aoc}" == "/2022" ]] || {
-    echo "the path $cwd must be in /2022";
+[[ "${cwd##*/aoc}" == "/2022/python" ]] || {
+    echo "the path $cwd must be in /2022/python";
     exit 1;
 }
 
