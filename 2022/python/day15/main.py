@@ -5,7 +5,7 @@
 
 from icecream import ic
 from collections import namedtuple
-
+Point = namedtuple('Point', ['x', 'y'])
 
 
 def add_reponse(tag, reponse):
@@ -95,28 +95,26 @@ def in_range_sensor(ps, p1, dmax=9) -> bool:
     return man_d <= dmax
 
 
+def in_range_dx(xs, x1, dmax=1) -> bool:
+    return abs(x1 -xs) <= dmax
+
 
 def part1(sensors, ym):
     # recherche des sensors a y = 10
     # limites de detection
     # dx + dy
-    rayon = max(sensors[s].dmax.x +  sensors[s].dmax.y for s in sensors)
-    ic(rayon)
-    xmin = min(map(lambda s : s.x, sensors)) - rayon
-    xmax = max(map(lambda s : s.x, sensors)) + rayon
-    ic(xmin, xmax)
     sensors_ranged = set()
 
     # parcours des sensors potentiellement dans la portée
     # test au limites NS
+    # ajout des bornes
     for sensor in sensors:
         # N et S
+        rayon = sensors[sensor].dmax.y + sensors[sensor].dmax.x
         if in_range_sensor(sensor, (sensor.x, ym), rayon):
             sensors_ranged.add(sensor)
-
-    # ic(sensors_ranged)
+    ic(sensors_ranged)
     line_ym = {}
-
     nb_beacons_on_line = set(
         beacon_d.beacon for beacon_d in 
         (sensors[sensor] for sensor in sensors_ranged) 
@@ -126,11 +124,11 @@ def part1(sensors, ym):
     nb = len(sensors_ranged)
     n = 0
     for sensor in sorted(sensors_ranged):
-        ic(sensor)
+        # ic(sensor)
         dmax = sensors[sensor].dmax.x + sensors[sensor].dmax.y # dx + dy
         dmax_x = dmax # - dy
         # sensor limited to dmax
-        ic(sensor.x-dmax_x, sensor.x+dmax_x +1)
+        # ic(sensor.x-dmax_x, sensor.x+dmax_x +1)
         for x in range(sensor.x-dmax_x, sensor.x+dmax_x +1):
             # if sensor == (8,7):
             #     ic(x)
@@ -138,6 +136,13 @@ def part1(sensors, ym):
                 in_range_sensor(sensor, (x, ym), dmax_x):
                     line_ym[x] = 1
                     # ic ("in", x)
+
+                    # abs(sensor.x x) + abd(sensor.y - ym) <= dmax
+                    # abs(sensor.x x) <= dmax - abs( sensor.y - ym) 
+
+                    #         dmax = sensors[sensor].dmax.x + sensors[sensor].dmax.y 
+                    #                                         dy = abs(y_b - y_s) 
+
 
         n += 1
         ic (n , nb)
@@ -163,7 +168,7 @@ def main():
     # TODO: your code here
     # commun_part
     sensors = {}
-    Point = namedtuple('Point', ['x', 'y'])
+    
     Sensor = namedtuple('Sensor', ['beacon', 'dmax'])
     for line in lines:
         parts = line.replace(':', '').replace(',', '').strip("\n").split(" ")
@@ -174,7 +179,10 @@ def main():
         # ic(parts)
         dx = abs(x_b - x_s)
         dy = abs(y_b - y_s) 
-        sensors[Point(x_s, y_s)] = Sensor(beacon=Point(x_b, y_b) , dmax=Point(dx, dy))
+        # r = min(dx, dy)
+        sensors[Point(x_s, y_s)] = Sensor(
+            beacon = Point(x_b, y_b), 
+            dmax = Point(dx, dy))
 
     # ic(sensors)
     
