@@ -1,0 +1,33 @@
+
+    depart 500, 0 
+
+y+ down
+
+
+    x - -------> +
+    y
+    -
+    |
+    |
+    |
+    v
+    +
+
+chute de sable:
+    - 1 unit down si libre
+    - sinon down-left si libre
+    - sino  down-right si libre
+    - sinon arret de la chute
+
+
+    ....
+    ..+..
+    ..o..
+
+/home/marc/mesprogs/aoc/2022/python/day14
+'   0 ........................................................'
+'   0 ...................................................'
+
+
+'   0 ..........'
+'   0 .........'

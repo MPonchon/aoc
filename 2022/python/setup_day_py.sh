@@ -47,15 +47,18 @@ def main():
         lines = [line.strip("\n") for line in f.readlines()]
 
     # TODO: your code here
-
-
+    # commun_part
+    reponse1 = part1(lines)
+    reponse2 = part2(lines)
     return reponse1, reponse2
 
 
 if __name__ == "__main__":
     reponse1, reponse2 = main()
+
     print(f"reponse part1:{reponse1}")
     print(f"reponse part2:{reponse2}")
+
     add_reponse("reponse part1", reponse1)
     add_reponse("reponse part2", reponse2)
 
@@ -66,3 +69,52 @@ EOF
 
 touch ${aoc_dir}/exemple.txt
 touch ${aoc_dir}/input.txt
+
+# test files
+
+if [[ ! -d  ${aoc_dir}/test ]]; then
+    mkdir "${aoc_dir}/test"
+fi
+
+touch ${aoc_dir}/test/__init__.py
+
+cat << EOF >${aoc_dir}/test/test_one.py
+#! venv/scripts/python.exe 
+# -*- coding: utf-8 -*-
+
+'''
+    
+   python3 -m unittest test.test_one
+
+
+'''
+
+import unittest
+import sys
+import os
+
+from main import *
+
+def print_function_name(function):
+    def new_function(*args, **kwargs):
+        if '.' in __name__:
+            modname = f"{__name__}".split('.')[1]
+        else:
+            modname = f"{__name__}"
+        print(f'{modname}/{function.__name__}')
+        
+        ret = function(*args, **kwargs)
+        return ret
+    return new_function
+
+
+class TestCmp(unittest.TestCase):
+
+    @print_function_name
+    @unittest.skip("reason for skipping")
+    def test_cmp_both_int(self):
+        p1 = 0
+        p2 = 5
+        self.assertEqual( -1 ,  ordered(p1, p2))
+
+EOF
