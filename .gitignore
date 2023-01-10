@@ -15,5 +15,8 @@ temp/*
 notes*
 sh*
 debug*
+**/autres
+
+reflexion*.txt
 
 2022/bash*

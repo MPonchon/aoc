@@ -1,0 +1,121 @@
+#! /bin/env python3
+#
+
+from collections import defaultdict
+from icecream import ic
+import heapq as heap
+
+def add_reponse(tag, reponse):
+    """
+        Ajoute la reponse en fin de fichier main
+        remplace le tag par le tag + la reponse
+    """
+    import subprocess
+    import os
+    path_to_main = os.path.join(os.getcwd(), "main.py")
+    if os.path.exists(path_to_main):
+        command = f"sed -i 's/# {tag}.*$/# {tag}: {reponse}/g' {path_to_main}"
+        subprocess.run(command, shell=True)
+    else:
+        print(f"Erreur chemin: {path_to_main}")
+
+
+def max_pressure(node, remaining_time, opened_valves, graphe, memo):
+
+    if remaining_time <= 1: # sortie de la reccurence
+        return 0 # no more pressure to add !
+
+    pressures = []  
+
+    # memoisation:
+    key = (node, remaining_time, ",".join(sorted(opened_valves)))
+    # ic(key)
+    if key in  memo:
+        return memo[key]
+    # ic(node)
+   
+    # choice: open valve and get new pressure !
+    if node not in opened_valves:
+        new_pressure = graphe[node]['rate']*(remaining_time-1)
+        # ic(node, remaining_time, graphe[node]['rate'], new_pressure)
+        current_pressure = new_pressure + max_pressure(node, remaining_time-1, opened_valves | {node}, graphe, memo)
+        pressures.append(current_pressure)
+
+    # choice: go to node voisin
+    for voisin in graphe[node]['voisins']:
+        pressure_voisin = max_pressure(voisin, remaining_time - 1, opened_valves, graphe, memo)
+        pressures.append(pressure_voisin)
+    maxi_pressure = max(pressures)
+
+    memo[key] = maxi_pressure #  memoisation
+    # ic(maxi_pressure)
+    return maxi_pressure
+
+
+def max_pressure_both(node1, node2, remaining_time, opened_valves, graphe, memo):
+
+    if remaining_time <= 1: # sortie de la reccurence
+        return 0 # no more pressure to add !
+
+    # ic(node1, node2, remaining_time, opened_valves)
+
+    # memoisation:
+    key = (node1, node2, remaining_time, ",".join(sorted(opened_valves)))
+    # ic(key)
+    if key in memo:
+        return memo[key]
+
+    choices = set()
+    choices_n1 = { v for v  in graphe[node1]['voisins'] }
+    if node1 not in opened_valves:
+        choices_n1.add('open'+node1)
+    # ic(choices_n1)
+    choices_n2 = { v for v  in graphe[node2]['voisins'] }
+    if node2 not in opened_valves:
+        choices_n2.add('open'+node2)
+    # ic(choices_n2)
+
+    for c1 in choices_n1:
+        for c2 in choices_n2:
+            if c1 == c2:
+                continue
+            choices.add((c1,c2))
+
+    if not choices:
+        return max_pressure_both(node1, node2, remaining_time-1, opened_valves, graphe, memo)
+
+    # ic(choices)
+    pressures = []  
+    for choice in choices:
+        c1, c2 = choice
+        # ic(c1, c2)
+        new_pressure = 0
+        new_valves = set()
+        if c1.startswith('open'):
+            n1 = c1[4:6]
+            new_pressure = graphe[n1]['rate']*(remaining_time-1)
+            new_valves.add(n1)
+
+            if c2.startswith('open'): 
+                n2 = c2[4:6]
+                new_valves.add(n2)
+                new_pressure += graphe[n2]['rate']*(remaining_time-1)
+                
+            else:
+                n2 = c2
+        else:
+            n1 = c1
+            if c2.startswith('open'):
+                n2 = c2[4:6]
+                new_valves.add(n2)
+                new_pressure = graphe[n2]['rate']*(remaining_time-1)
+            else:
+                n2 = c2
+
+        current_pressure = new_pressure + max_pressure_both(n1, n2, remaining_time-1, opened_valves | new_valves, graphe, memo)
+        pressures.append(current_pressure)
+
+    maxi_pressure = max(pressures)
+    memo[key] = maxi_pressure #  memoisation
+    # ic(maxi_pressure)
+    return maxi_pressure

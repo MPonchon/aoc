@@ -5,23 +5,15 @@
    python3 -m unittest test.test_main
 '''
 
+from test.wrappers import print_function_name
 import unittest
+
 import sys
 import os
 
 from main import *
 
-def print_function_name(function):
-    def new_function(*args, **kwargs):
-        if '.' in __name__:
-            modname = f"{__name__}".split('.')[1]
-        else:
-            modname = f"{__name__}"
-        print(f'{modname}/{function.__name__}')
-        
-        ret = function(*args, **kwargs)
-        return ret
-    return new_function
+
 
 
 def test_time():

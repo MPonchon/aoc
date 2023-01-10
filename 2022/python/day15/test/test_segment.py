@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    
    python3 -m unittest test.test_segment
-
-
 '''
 
 import unittest

@@ -22,18 +22,16 @@ cat << EOF >${aoc_dir}/main.py
 # https://adventofcode.com/
 #
 
+from utils import add_reponse
 from icecream import ic
 
 
-def add_reponse(tag, reponse):
-    import subprocess
-    import os
-    path_to_main = os.path.join(os.getcwd(), "main.py")
-    if os.path.exists(path_to_main):
-        command = f"sed -i 's/# {tag}.*$/# {tag}: {reponse}/g' {path_to_main}"
-        subprocess.run(command, shell=True)
-    else:
-        ic(f"Erreur chemin: {path_to_main}")
+def part1(lines):
+    return 0
+
+
+def part2(lines):
+    return 0
 
 
 def main():
@@ -67,6 +65,27 @@ if __name__ == "__main__":
 # reponse part2
 EOF
 
+cat << EOF >${aoc_dir}/utils.py
+#! /bin/env python3
+#
+
+def add_reponse(tag, reponse):
+    """
+        Ajoute la reponse en fin de fichier main
+        remplace le tag par le tag + la reponse
+    """
+    import subprocess
+    import os
+    path_to_main = os.path.join(os.getcwd(), "main.py")
+    if os.path.exists(path_to_main):
+        command = f"sed -i 's/# {tag}.*$/# {tag}: {reponse}/g' {path_to_main}"
+        subprocess.run(command, shell=True)
+    else:
+        print(f"Erreur chemin: {path_to_main}")
+
+EOF
+
+
 touch ${aoc_dir}/exemple.txt
 touch ${aoc_dir}/input.txt
 
@@ -78,23 +97,12 @@ fi
 
 touch ${aoc_dir}/test/__init__.py
 
-cat << EOF >${aoc_dir}/test/test_one.py
+cat << EOF >${aoc_dir}/test/wrappers.py
 #! venv/scripts/python.exe 
 # -*- coding: utf-8 -*-
-
-'''
-    
-   python3 -m unittest test.test_one
-
-
-'''
-
-import unittest
-import sys
-import os
-
-from main import *
-
+"""
+    Helpers decorators
+"""
 def print_function_name(function):
     def new_function(*args, **kwargs):
         if '.' in __name__:
@@ -107,14 +115,28 @@ def print_function_name(function):
         return ret
     return new_function
 
+EOF
+
+cat << EOF >${aoc_dir}/test/test_one.py
+#! venv/scripts/python.exe 
+# -*- coding: utf-8 -*-
+'''
+   python3 -m unittest test.test_one
+'''
+
+from test.wrappers import print_function_name
+import unittest
+
+import sys
+import os
+
+from main import *
 
 class TestCmp(unittest.TestCase):
 
     @print_function_name
     @unittest.skip("reason for skipping")
-    def test_cmp_both_int(self):
-        p1 = 0
-        p2 = 5
-        self.assertEqual( -1 ,  ordered(p1, p2))
+    def test_casewherefunctiondosomething(self):
+        # self.assertEqual(expected, functiondosomething())
 
 EOF

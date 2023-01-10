@@ -1,0 +1,16 @@
+
+
+
+
+
+                            AA
+
+            BB              II                  DD 
+
+        CC      AAx     JJ  AAx          CC      EE      AAx      
+        CC              JJ                x      EE
+    BBx     DDx          IIx                  DDx   FF 
+                                                    FF
+                                                GG      EEx
+                                            HH      FFx
+                                            GGx
