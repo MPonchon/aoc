@@ -44,9 +44,8 @@ public class Day03Application implements CommandLineRunner {
 		System.out.println("sum " + sum);
 
 		/**
-		 * 77224746
 		 * part2
-		 * sum 80519998
+		 * sum 84495585
 		 */
 	}
 

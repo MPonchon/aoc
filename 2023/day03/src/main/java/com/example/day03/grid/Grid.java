@@ -2,9 +2,10 @@ package com.example.day03.grid;
 
 import com.example.day03.dir.Direction;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -121,59 +122,97 @@ public class Grid {
         return column + line * lineSize;
     }
 
-    public static List<Integer> getNumbersAroundStar(
-            List<String> lines, int idxline , Map<Integer, List<Integer>> stars ) {
-        List<Integer> result = null;
-        String regex = "\\*";
-        Pattern pattern = Pattern.compile(regex);
 
-        String line = lines.get(idxline);
-        Matcher matcher = pattern.matcher(line);
-        while (matcher.find()) {
-            int posStar = matcher.start();
-            int indexStar = calcIndex(idxline, posStar, line.length());
-            if (stars.containsKey(indexStar)) { continue; }
-            result = new ArrayList<>(3);
-            result.add(indexStar);
-            if (idxline > 0 ) {
-                addNumberToList(result, getNumberAbove(lines, idxline, posStar));
-            }
-            addNumberToList(result, getNumber(lines, idxline, posStar, Direction.LEFT));
-            addNumberToList(result, getNumber(lines, idxline, posStar, Direction.RIGHT));
-            addNumberToList(result, getNumberBellow(lines, idxline, posStar));
-            if (result.size() == 3 ) return  result;
-        }
-        if (result != null && result.size() == 3 ) return result;
-        return null;
-    }
     public static void addNumberToList(List<Integer> numbers, Integer number) {
         if (number!= null) { numbers.add(number);}
     }
 
+    public static List<Integer> findNumbersAroundStar( List<String> lines, int idxline, int posStar ) {
+        List<Integer> result = new ArrayList<>();
+        if (idxline > 0) {
+            String line0 = lines.get(idxline -1);
+            if (isDigit(line0.charAt(posStar))) {
+                Integer number = getNumber(lines, idxline, posStar, Direction.UP);
+                if (number!= null) { result.add(number); }
+            }
+            else {
+                Integer number = getNumber(lines, idxline -1, posStar, Direction.LEFT);
+                if (number!= null) { result.add(number); }
+                number = getNumber(lines, idxline - 1, posStar, Direction.RIGHT);
+                if (number!= null) { result.add(number); }
+            }
+        }
+        Integer number = getNumber(lines, idxline, posStar, Direction.LEFT);
+        if (number!= null) { result.add(number); }
+        number = getNumber(lines, idxline, posStar, Direction.RIGHT);
+        if (number!= null) { result.add(number); }
+
+        if (idxline < lines.size() - 1) {
+            String line = lines.get(idxline + 1);
+            if (isDigit(line.charAt(posStar))) {
+                number = getNumber(lines, idxline, posStar, Direction.DOWN);
+                if (number != null) {
+                    result.add(number);
+                }
+            } else {
+                number = getNumber(lines, idxline + 1, posStar, Direction.LEFT);
+                if (number != null) { result.add(number);}
+                number = getNumber(lines, idxline + 1, posStar, Direction.RIGHT);
+                if (number != null) { result.add(number); }
+            }
+        }
+        return result.size() == 2 ? result : null;
+    }
+
+    public static Map<Integer, List<Integer>>  mapLine (List<String> lines, int idxline ) {
+        Map<Integer, List<Integer>> mapStars = new HashMap<>();
+        String line = lines.get(idxline);
+        String regex = "\\*";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(line);
+        while (matcher.find()) {
+            int posStar = matcher.start();
+            int indexStar = calcIndex(idxline, posStar, line.length());
+            List<Integer> result = findNumbersAroundStar(lines, idxline, posStar);
+            if (result != null && result.size() == 2 ) {
+                 mapStars.put(indexStar, result);
+            }
+        }
+        return mapStars.isEmpty() ? null : mapStars;
+    }
+
     public static Map<Integer, List<Integer>>  mapStarAroundNumber(List<String> lines) {
         Map<Integer, List<Integer>> mapStars = new java.util.HashMap<>();
-        IntStream.range(0, lines.size())
-                .forEach(index -> {
-                    List<Integer> starAndNumbers = null;
-                    do {
-                        starAndNumbers = getNumbersAroundStar(lines, index, mapStars);
-                        if (starAndNumbers != null) {
-                            mapStars.put(starAndNumbers.get(0), starAndNumbers.subList(1, 3));
-                        }
-                    } while (starAndNumbers != null);
+        IntStream.range(0, lines.size()).forEach(
+                index -> {
+                    Map<Integer, List<Integer>> mapLineStars = mapLine(lines, index);
+                    if (mapLineStars != null) { mapStars.putAll(mapLineStars); }
                 });
-
         return mapStars;
     }
 
     public static int computeGearRatios(List<String> lines) {
         Map<Integer, List<Integer>> mapStars =  mapStarAroundNumber(lines);
+        displayMap(mapStars, lines.get(0).length());
         return mapStars.values()
                 .stream()
                 .mapToInt(
                         gearsList -> gearsList.stream()
                                 .reduce(1 , (a, b) -> a * b))
                 .sum();
+
     }
+
+    public static void displayMap(Map<Integer, List<Integer>> mapStars, int lineSize ) {
+        List<Integer> keys = new ArrayList<>(mapStars.keySet());
+        Collections.sort(keys);
+        for(Integer key : keys) {
+            int line = key / lineSize;
+            int column = key % lineSize;
+            System.out.printf("l %d c %d (index %d):%s %n", line, column, key, mapStars.get(key));
+
+        }
+    }
+
 
 }
