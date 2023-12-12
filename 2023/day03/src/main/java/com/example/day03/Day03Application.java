@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.day03.utils.Utils;
 
@@ -37,6 +38,12 @@ public class Day03Application implements CommandLineRunner {
 		 * part1
 		 * sum 544664
 		 */
+
+		System.out.println("part2");
+		lines = Utils.loadFile("src/main/resources/input.txt");
+//		Map<Integer, List<Integer>> stars = null;
+//		stars = Grid.mapStarAroundNumber(lines);
+//		System.out.println("stars " + stars);
 	}
 
 }
