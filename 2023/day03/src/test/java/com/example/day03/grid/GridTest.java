@@ -67,7 +67,7 @@ public class GridTest {
         lines.add("..35.633.");
 
         // When
-        List<Integer> starAndNumbers = Grid.getStarAroundNumber(lines, 1, stars);
+        List<Integer> starAndNumbers = Grid.getNumbersAroundStar(lines, 1, stars);
 
         //Then
         assertEquals(11, starAndNumbers.get(0));
@@ -170,11 +170,46 @@ public class GridTest {
         Map<Integer, List<Integer>> stars = null;
         List<String> lines = Utils.loadFile("src/main/resources/demo.txt");
 
+
         // When
         stars = Grid.mapStarAroundNumber(lines);
+
         //Then
-//        System.out.println("stars: " + stars);
+        System.out.println("stars: " + stars);
+        System.out.println("stars nb: " + stars.size());
+
         assertEquals(stars.get(13), List.of(467, 35));
         assertEquals(stars.get(85), List.of(755, 598));
+    }
+
+
+
+    @Test
+    void mapStarAroundNumber_map_all_gears_3lines() {
+        // Given
+        Map<Integer, List<Integer>> stars = null;
+        List<String> lines = Utils.loadFile("src/main/resources/input.txt");
+
+        lines = lines.subList(0, 3);
+        System.out.println("lines: " + lines);
+        // When
+        stars = Grid.mapStarAroundNumber(lines);
+
+        //Then
+        assertEquals(5 , stars.size());
+    }
+
+
+    @Test
+    void computeGearRatios_return() {
+        // Given
+        Map<Integer, List<Integer>> stars = null;
+        List<String> lines = Utils.loadFile("src/main/resources/demo.txt");
+
+        // When
+        int somme = Grid.computeGearRatios(lines);
+        //Then
+        assertEquals(467835, somme);
+
     }
 }

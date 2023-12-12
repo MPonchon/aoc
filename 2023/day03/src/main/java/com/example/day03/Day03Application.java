@@ -26,7 +26,6 @@ public class Day03Application implements CommandLineRunner {
 		int sum = Grid.sumParts(lines);
 		System.out.println("sum " + sum);
 
-
 		System.out.println("part1");
 		lines = Utils.loadFile("src/main/resources/input.txt");
 		sum = Grid.sumParts(lines);
@@ -41,9 +40,12 @@ public class Day03Application implements CommandLineRunner {
 
 		System.out.println("part2");
 		lines = Utils.loadFile("src/main/resources/input.txt");
-//		Map<Integer, List<Integer>> stars = null;
-//		stars = Grid.mapStarAroundNumber(lines);
-//		System.out.println("stars " + stars);
+		sum = Grid.computeGearRatios(lines);
+		System.out.println("sum " + sum);
+
+		/**
+		 * 77224746
+		 */
 	}
 
 }

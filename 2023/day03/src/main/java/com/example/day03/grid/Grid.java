@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+import static java.lang.Character.isDigit;
+
 public class Grid {
     static final int NumberSize = 3;
 
@@ -94,10 +96,14 @@ public class Grid {
     public static Integer getNumber(List<String> lines, int pos, int posStar, Direction dir) {
         Integer result = null;
         if (dir == Direction.LEFT && posStar >= Grid.NumberSize) {
+            if(! isDigit(lines.get(pos).charAt(posStar - 1)) ) { return null; }
             String line = lines.get(pos).substring(posStar - Grid.NumberSize, posStar);
+//            System.out.println("line "+ line);
             result = findFirstNumber(line);
+
         }
         else if (dir == Direction.RIGHT && posStar < lines.get(0).length() - Grid.NumberSize) {
+            if(! isDigit(lines.get(pos).charAt(posStar + 1)) ) { return null; }
             String line = lines.get(pos).substring(posStar,  posStar + Grid.NumberSize+1);
             result = findFirstNumber(line);
         }
@@ -123,26 +129,26 @@ public class Grid {
         return column + line * lineSize;
     }
 
-    public static List<Integer> getStarAroundNumber(
-            List<String> lines, int pos , Map<Integer, List<Integer>> stars ) {
+    public static List<Integer> getNumbersAroundStar(
+            List<String> lines, int idxline , Map<Integer, List<Integer>> stars ) {
         List<Integer> result = null;
         String regex = "\\*";
         Pattern pattern = Pattern.compile(regex);
 
-        String line = lines.get(pos);
+        String line = lines.get(idxline);
         Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
             int posStar = matcher.start();
-            int indexStar = calcIndex(pos, posStar, line.length());
-            if (stars.containsKey(posStar)) { return null; }
+            int indexStar = calcIndex(idxline, posStar, line.length());
+            if (stars.containsKey(indexStar)) { continue; }
             result = new ArrayList<>(3);
             result.add(indexStar);
-            if (pos > 0 ) {
-                addNumberToList(result, getNumberAbove(lines, pos, posStar));
+            if (idxline > 0 ) {
+                addNumberToList(result, getNumberAbove(lines, idxline, posStar));
             }
-            addNumberToList(result, getNumber(lines, pos, posStar, Direction.LEFT));
-            addNumberToList(result, getNumber(lines, pos, posStar, Direction.RIGHT));
-            addNumberToList(result, getNumberBellow(lines, pos, posStar));
+            addNumberToList(result, getNumber(lines, idxline, posStar, Direction.LEFT));
+            addNumberToList(result, getNumber(lines, idxline, posStar, Direction.RIGHT));
+            addNumberToList(result, getNumberBellow(lines, idxline, posStar));
             if (result.size() == 3 ) return  result;
         }
         if (result != null && result.size() == 3 ) return result;
@@ -156,34 +162,26 @@ public class Grid {
         Map<Integer, List<Integer>> mapStars = new java.util.HashMap<>();
         IntStream.range(0, lines.size())
                 .forEach(index -> {
-//                    String line = lines.get(index);
-//                    System.out.println("Index: " + index + ", line: " + line);
-                    List<Integer> starAndNumbers = getStarAroundNumber(lines, index, mapStars);
-                    if (starAndNumbers!= null) {
-                        mapStars.put(starAndNumbers.get(0), starAndNumbers.subList(1, 3));
-                    }
+                    List<Integer> starAndNumbers = null;
+                    do {
+                        starAndNumbers = getNumbersAroundStar(lines, index, mapStars);
+                        if (starAndNumbers != null) {
+                            mapStars.put(starAndNumbers.get(0), starAndNumbers.subList(1, 3));
+                        }
+                    } while (starAndNumbers != null);
                 });
 
         return mapStars;
     }
 
     public static int computeGearRatios(List<String> lines) {
-        Map<Integer, List<Integer>> mapStars = new java.util.HashMap<>();
-        int somme = 0;
-        IntStream.range(0, lines.size())
-                .forEach(index -> {
-//                    String line = lines.get(index);
-//                    System.out.println("Index: " + index + ", line: " + line);
-                    List<Integer> starAndNumbers = getStarAroundNumber(lines, index, mapStars);
-                    if (starAndNumbers!= null) {
-                        int ratio = starAndNumbers.get(1) / starAndNumbers.get(2);
-                        //   mapStars.put(starAndNumbers.get(0), starAndNumbers.subList(1, 3));
-                        somme += ratio;
-                    }
-                });
-
-        return somme;
+        Map<Integer, List<Integer>> mapStars =  mapStarAroundNumber(lines);
+        return mapStars.values()
+                .stream()
+                .mapToInt(
+                        gearsList -> gearsList.stream()
+                                .reduce(1 , (a, b) -> a * b))
+                .sum();
     }
-
 
 }
