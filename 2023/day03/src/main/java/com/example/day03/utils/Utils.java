@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Utils {
 
-    public static List<String> loafFile(String pathToFile) {
+    public static List<String> loadFile(String pathToFile) {
         List<String> lines = new ArrayList<>();
         try {
             Scanner input = new Scanner(pathToFile);
