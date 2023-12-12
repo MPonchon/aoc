@@ -44,6 +44,18 @@ public class GridTest {
     }
 
     @Test
+    void part1_input_result_is_544664() {
+        // Given
+        List<String> lines = Utils.loadFile("src/main/resources/input.txt");
+
+        // When
+        int somme = Grid.sumParts(lines);
+        //Then
+        assertEquals(544664, somme);
+    }
+
+    // --- part2 ----
+    @Test
     void getAdjacentNumbers_return_467() {
         // Given
         List<String> lines = new ArrayList<>();
@@ -191,17 +203,19 @@ public class GridTest {
         List<String> lines = Utils.loadFile("src/main/resources/input.txt");
 
         lines = lines.subList(0, 3);
-        System.out.println("lines: " + lines);
+//        System.out.println("lines: " + lines);
         // When
         stars = Grid.mapStarAroundNumber(lines);
 
         //Then
-        assertEquals(5 , stars.size());
+        //System.out.println("stars: " + stars);
+        assertEquals(8 , stars.size());
     }
 
 
+
     @Test
-    void computeGearRatios_return() {
+    void computeGearRatios_Demo_return_467835() {
         // Given
         Map<Integer, List<Integer>> stars = null;
         List<String> lines = Utils.loadFile("src/main/resources/demo.txt");

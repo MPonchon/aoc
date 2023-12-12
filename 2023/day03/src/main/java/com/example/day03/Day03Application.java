@@ -45,6 +45,8 @@ public class Day03Application implements CommandLineRunner {
 
 		/**
 		 * 77224746
+		 * part2
+		 * sum 80519998
 		 */
 	}
 

@@ -21,16 +21,11 @@ public class Grid {
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-//            System.out.println("i: " + i + " line: " + line);
             Matcher matcher = pattern.matcher(line);
-            // Vérifier s'il y a une correspondance
             while (matcher.find()) {
-                String nombreTrouve = line.substring(matcher.start(), matcher.end());
-//                System.out.println("check fot nombreTrouve: " + nombreTrouve);
+                String nombreTrouve = matcher.group();
                 int posStart = matcher.start() == 0 ? 0 :  matcher.start() - 1;
-//                System.out.println("matcher.end(): " + matcher.end() + " line.length(): " + line.length() + " posStart: " + posStart);
                 int posFin = matcher.end() == line.length()  ?  matcher.end()  : matcher.end() + 1;
-//                System.out.println("posStart: " + posStart + " posFin: " + posFin + " nombreTrouve: " + nombreTrouve + " line :"  + line);
                 List<String> window = new ArrayList<>();
                 if (i == 0) {
                     window.add(line.substring(posStart, posFin));
@@ -46,7 +41,6 @@ public class Grid {
                 if (symbolAround( window) ){
                     numbers.add(Integer.parseInt(nombreTrouve));
                 }
-
             }
         }
         return numbers;
@@ -56,7 +50,6 @@ public class Grid {
         for(int i = 0; i < window.get(0).length(); i++) {
             for (String line : window) {
                 Character thechar = line.charAt(i);
-//                System.out.println("i: " + i + " line: " + line + " -> char = " + thechar);
                 if (thechar != '.' && (thechar < '0' || thechar > '9')) { return true; }
             }
         }
@@ -65,13 +58,12 @@ public class Grid {
 
     public static int sumParts(List<String> lines) {
         List<Integer> numbers =  getAdjacentNumbers(lines);
-
         return numbers.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
     }
 
-    // ----------------
+    // ---------------- part 2 -------------------
 
     public static Integer findFirstNumber(String line) {
         String regex = "\\d+";
