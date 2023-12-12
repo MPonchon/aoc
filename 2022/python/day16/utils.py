@@ -2,9 +2,11 @@
 #
 
 from collections import defaultdict
+from typing import List
 from icecream import ic
 import heapq as heap
 import math
+from copy import copy
 
 
 def add_reponse(tag, reponse):
@@ -57,6 +59,87 @@ def max_pressure(node, remaining_time, opened_valves, graphe, memo):
     memo[key] = maxi_pressure  #  memoisation
     # ic(maxi_pressure)
     return maxi_pressure
+
+
+"""
+on cherche a passer par toutes les vannes fermées et les ouvrir
+et pas a passer par tous les voisins
+
+a l'etape n:
+    je teste toutes les vannes restantes 
+        pour une vanne je calcule la pression 
+    et j'ajoute le resultat dans une liste
+
+"""
+
+
+def max_pressure2(
+    node,
+    remain_valves,
+    remaining_time,
+    actual_pressure,
+
+    graphe,
+    memo,
+    dist,
+    prof
+) -> int:
+    """
+    Calcul pression
+    """
+    # ic(node, remaining_time, remain_valves,actual_pressure)
+
+    if remaining_time < 1:
+        return actual_pressure
+    
+    # pressure = actual_pressure
+    # pressure += remaining_time * graphe[node]["rate"]
+
+    remain_valves -= {node}     # je teste toutes les vannes restantes
+    
+    pressions = []
+    # ic(remain_valves)
+    rm = copy(remain_valves)
+    for valve in rm:
+
+        # ic(remain_valves)
+        if dist[node][valve] == math.inf:
+            continue
+        
+        if remaining_time < 2: # move + open
+            return actual_pressure
+
+        # ouverture et deplacement vers la vanne
+        temps = remaining_time - dist[node][valve] - 1
+
+        # calcul pression liberée 
+        pressure = actual_pressure
+        pressure += temps * graphe[valve]["rate"]
+        pressure = max_pressure2(
+            valve,
+            remain_valves,
+            temps,
+            pressure,
+
+            graphe,
+            memo,
+            dist,
+            prof +1)
+
+        if prof >= 3:
+            ic(prof , valve,remaining_time, actual_pressure, temps)
+
+        pressions.append(pressure)
+
+    if prof == 3:
+        ic(prof , node, pressions)
+    if pressions:
+        best = max(pressions)
+    else:
+        best = 0
+    actual_pressure += best
+    return actual_pressure
+
 
 
 def max_pressure_both(node1, node2, remaining_time, opened_valves, graphe, memo):
@@ -142,7 +225,7 @@ def all_shortest_path(graphe):
     # initialisation avec les dist: 1 min d'un node a l'autre
     for u in (v for v in graphe):
         dist[u] = {}
-        ic(dist)
+        # ic(dist)
         for v in (v for v in graphe):
             if v in dist[u]:
                 continue

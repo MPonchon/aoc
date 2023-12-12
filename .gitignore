@@ -20,3 +20,14 @@ debug*
 reflexion*.txt
 
 2022/bash*
+
+.idea
+.gitignore
+*.zip
+
+*.mvn*
+**/mvnw*
+
+
+*/target/*
+*/resources/*
