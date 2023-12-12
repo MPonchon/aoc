@@ -30,6 +30,13 @@ public class Day03Application implements CommandLineRunner {
 		lines = Utils.loadFile("src/main/resources/input.txt");
 		sum = Grid.sumParts(lines);
 		System.out.println("sum " + sum);
+		/*
+		Demo
+		sum 4361
+		part1
+		sum 544664
+
+
 
 		/**
 		 * Demo

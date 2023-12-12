@@ -17,10 +17,10 @@ public class GridTest {
         lines.add("*..*");
 
         // When
-        boolean result = Grid.symbolAround(lines);
+        Coord result = Grid.symbolAround(lines, null);
 
         //Then
-        assertTrue(result);
+        assertNotNull(result);
 
     }
 
@@ -33,10 +33,10 @@ public class GridTest {
         lines.add("..&.");
 
         // When
-        boolean result = Grid.symbolAround(lines);
+        Coord result = Grid.symbolAround(lines, null);
 
         //Then
-        assertTrue(result);
+        assertNotNull(result);
     }
 
     @Test
@@ -53,4 +53,22 @@ public class GridTest {
         assertTrue(numbers.contains(467));
     }
 
+
+    @Test
+    void find_Gears_in_Window3lines(){
+        // Given
+        List<String> lines = new ArrayList<>();
+        lines.add("467..114..");
+        lines.add("...*......");
+        lines.add("..35..633.");
+
+        // When
+        List<Integer> numbers = Grid.findGearsInWindow(lines);
+
+        //Then
+        assertTrue(numbers.contains(467));
+        assertTrue(numbers.contains(35));
+        assertFalse(numbers.contains(114));
+        assertFalse(numbers.contains(633));
+    }
 }
