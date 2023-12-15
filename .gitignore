@@ -27,3 +27,5 @@ reflexion*.txt
 **/.mvn*
 **.zip
 */*/.gitignore
+
+*/day*/src/main/temp
