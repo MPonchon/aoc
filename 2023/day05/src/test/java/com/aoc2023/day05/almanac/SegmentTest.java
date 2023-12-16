@@ -33,7 +33,7 @@ class SegmentTest {
     @Test
     void fragment_inside_left() {
         //Given
-git branch         final Segment current = new Segment(10L,20L);
+        final Segment current = new Segment(10L,20L);
         final Segment other = new Segment(8L,14L);
         //When
         List<Segment> result = Segment.fragment(current, other);
