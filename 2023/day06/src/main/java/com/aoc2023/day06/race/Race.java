@@ -11,7 +11,7 @@ import org.aoc.utils.Utils;
 
 public class Race {
 
-    private static List<Integer> stringToInt(String s) {
+    public static List<Integer> stringToInt(String s) {
         return Arrays.stream(s.substring(s.indexOf(":")+1).split(" +"))
                     .filter(line ->!line.isEmpty()).mapToInt(Integer::parseInt).boxed().toList();
     }

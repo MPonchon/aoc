@@ -30,6 +30,7 @@ class RaceTest {
         assertEquals(4, Race.nbWinnings(7, 9));
         assertEquals(8, Race.nbWinnings(15, 40));
         assertEquals(9, Race.nbWinnings(30, 200));
+        //assertEquals(9, Race.nbWinnings(71530, 940200));
     }
 
     @Test
