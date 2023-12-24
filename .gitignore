@@ -27,3 +27,6 @@ reflexion*.txt
 **/.mvn*
 **.zip
 */*/.gitignore
+
+**/.attach*
+
