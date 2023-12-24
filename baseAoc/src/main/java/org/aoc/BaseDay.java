@@ -17,7 +17,7 @@ public class BaseDay<T, U> {
     private U demoPart2;
     private U part2;
 
-    BaseDay(int day) {
+    public BaseDay(int day) {
         this.day = day;
     }
 
@@ -27,16 +27,24 @@ public class BaseDay<T, U> {
             ----------------------
             """, day);
     }
+    public String getPart(int n) {
+        return new StringBuilder()
+                .append("- demo: ")
+                .append(n == 1 ? getDemoPart1(): getDemoPart2())
+                .append("\n")
+                .append("- result: ")
+                .append(n == 1 ? getPart1(): getPart2())
+                .append("\n")
+                .toString();
+    }
     public void run() {
-        StringBuilder sb = new StringBuilder();
-//        sb.append("AdventOfCode day: ").append(day).append("\n");
-        sb.append(title());
-        sb.append("Part 1:\n");
-        sb.append("- demo: ").append(demoPart1).append("\n");
-        sb.append("- result: ").append(part1).append("\n\n");
-        sb.append("Part 2:\n");
-        sb.append("- demo: ").append(demoPart2).append("\n");
-        sb.append("- result: ").append(part2).append("\n");
+        StringBuilder sb = new StringBuilder()
+                .append(title())
+                .append("Part 1:\n")
+                .append(getPart(1))
+                .append("\nPart 2:\n")
+                .append(getPart(2));
+
         System.out.println(sb);
     }
 
