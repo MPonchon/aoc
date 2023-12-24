@@ -3,36 +3,34 @@ package com.aoc2023.day07;
 import java.util.*;
 
 public enum HandType {
-    FIVE_OAK,
-    FOUR_OAK,
-    FULL_HOUSE,
-    THREE_OAK,
-    TWO_PAIR,
+    HIGH_CARD,
     ONE_PAIR,
-    HIGH_CARD;
+    TWO_PAIR,
+    THREE_OAK,
+    FULL_HOUSE,
+    FOUR_OAK,
+    FIVE_OAK;
 
     public static HandType getType(String hand) {
-        List<Integer> counts = findTypes(hand);
-        if (counts.isEmpty()) {
-            return HIGH_CARD;
-        }
+        List<Integer> counts = getCounts(hand);
 
-        if (counts.size() == 1) {
-            if (counts.get(0) == 5) {
-                return FIVE_OAK;
-            } else if (counts.get(0) == 4) {
-                return FOUR_OAK;
-            } else if (counts.get(0) == 3) {
-                return THREE_OAK;
-            } else {
-                return ONE_PAIR;
-            }
-        } else {
-            if (counts.contains(3)) {
+        if (counts.get(0) == 5) {
+            return FIVE_OAK;
+        } else if (counts.get(0) == 4 ) {
+            return FOUR_OAK;
+        }
+        else if (counts.get(0) == 3) {
+            if (counts.get(1) == 2) {
                 return FULL_HOUSE;
             }
-            return TWO_PAIR;
+            return THREE_OAK;
+        } else if (counts.get(0) == 2) {
+            if (counts.get(1) == 2) {
+                return TWO_PAIR;
+            }
+            return ONE_PAIR;
         }
+        return HIGH_CARD;
     }
 
     private static List<Integer> getCounts(String hand) {
@@ -55,7 +53,6 @@ public enum HandType {
         return counts.get(0);
     }
 
-    // carte contigues
     static List<Integer> findTypes(String hand) {
         char old =  hand.charAt(0);
         int same = 0;

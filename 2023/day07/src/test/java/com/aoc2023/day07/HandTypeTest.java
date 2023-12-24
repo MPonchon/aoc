@@ -38,7 +38,7 @@ class HandTypeTest {
         assertEquals(HandType.ONE_PAIR, HandType.getType("IIO1U"));
         assertEquals(HandType.ONE_PAIR, HandType.getType("AEIIU"));
         assertEquals(HandType.HIGH_CARD, HandType.getType("12345"));
-        assertEquals(HandType.HIGH_CARD, HandType.getType("32343"));
+        assertEquals(HandType.THREE_OAK, HandType.getType("32343"));
     }
 
     @Test
