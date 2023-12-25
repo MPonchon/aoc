@@ -57,7 +57,6 @@ public class DesertMap {
         while (!current.equals(ARRIVAL)) {
             if (index >= instructions.length()) { index = 0; }
             Character instruction = instructions.charAt(index);
-//            System.out.println("inst   " + instruction);
             if (instruction.equals('L')) {
                 current = desertMap.get(current).getLeft();
             } else {
@@ -69,34 +68,50 @@ public class DesertMap {
         return steps;
     }
 
-    public int parcoursGhost() {
+    public long parcoursGhost() {
         List<String> nodes = new ArrayList<>(desertMap.keySet().stream()
                 .filter(x -> x.endsWith("A"))
                 .toList());
 
-        int index = 0;
-        int steps = 0;
-        boolean finished = false;
-        while (! finished) {
-            if (index >= instructions.length()) { index = 0; }
-            Character instruction = instructions.charAt(index);
-            int countEnds = 0;
-            for (int i = 0; i < nodes.size(); i++) {
-                String node = nodes.get(i);
-                if (instruction.equals('L')) {
-                    node = desertMap.get(node).getLeft();
-                } else {
-                    node = desertMap.get(node).getRight();
+        List<Long> nodesMaxSteps = new ArrayList<>();
+        // pour chaque node, recherche du nb de steps
+        for (String node : nodes) {
+            long steps = 0;
+            while(!node.endsWith("Z")) {
+                for (Character instruction : instructions.toCharArray()) {
+                    if (instruction.equals('L')) {
+                        node = desertMap.get(node).getLeft();
+                    } else {
+                        node = desertMap.get(node).getRight();
+                    }
+                    steps++;
+                    if (node.endsWith("Z")) {
+                        break;
+                    }
                 }
-                nodes.set(i, node);
-                if (node.endsWith("Z")) { countEnds ++; }
             }
-            if (countEnds == nodes.size()) {
-                finished = true;
-            }
-            index++;
-            steps++;
+            nodesMaxSteps.add(steps);
         }
-        return steps;
+        return ppcm(nodesMaxSteps);
     }
+
+    // ppcm = a * b / pgcd(a, b)
+    public static long ppcm(List<Long> numbers) {
+        long result = numbers.get(0);
+        for (int i = 1; i < numbers.size(); i++) {
+            result =  (result * numbers.get(i)) / pgcd(result, numbers.get(i));
+        }
+        return result;
+    }
+
+    //PGCD: algorithme d'Euclide
+    private static long pgcd(long a, long b) {
+        while (b != 0) {
+            long temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
 }

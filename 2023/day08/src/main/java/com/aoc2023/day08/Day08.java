@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.aoc.utils.Utils.INPUT_PATH;
 
-public class Day08 extends BaseDay<Integer, Integer>{
+public class Day08 extends BaseDay<Integer, Long>{
     public Day08(int day) {
         super(day);
     }
@@ -24,7 +24,7 @@ public class Day08 extends BaseDay<Integer, Integer>{
     }
 
     @Override
-    public Integer getPart2() {
+    public Long getPart2() {
         DesertMap desertMap = new DesertMap();
         desertMap.loadFromFile(INPUT_PATH);
         return  desertMap.parcoursGhost();

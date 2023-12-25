@@ -110,7 +110,7 @@ class DesertMapTest {
         DesertMap map = new DesertMap();
         map.loadFromFile("src/main/resources/demo3.txt");
         //When
-        int steps = map.parcoursGhost();
+        long steps = map.parcoursGhost();
         //Then
         assertEquals(6, steps);
     }
