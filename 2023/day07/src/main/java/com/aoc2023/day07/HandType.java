@@ -11,9 +11,9 @@ public enum HandType {
     FOUR_OAK,
     FIVE_OAK;
 
-    public static HandType getType(String hand) {
-        List<Integer> counts = getCounts(hand);
 
+
+    private static HandType getHandType(List<Integer> counts) {
         if (counts.get(0) == 5) {
             return FIVE_OAK;
         } else if (counts.get(0) == 4 ) {
@@ -32,44 +32,39 @@ public enum HandType {
         }
         return HIGH_CARD;
     }
+    public static HandType getType(String hand) {
+        return getType(hand, false);
+    }
 
-    private static List<Integer> getCounts(String hand) {
-        Map<Character, Integer> charCount = getMap(hand);
-        List<Integer> counts = new ArrayList<>(charCount.values());
+    public static HandType getType(String hand, boolean joker) {
+        List<Integer> counts = getCounts(hand, joker);
+        return getHandType(counts);
+    }
+
+    private static List<Integer> getCounts(String hand, boolean joker) {
+        Map<Character, Integer> occurrences = getMap(hand, joker);
+        List<Integer> counts = new ArrayList<>(occurrences.values());
         Collections.sort(counts, Collections.reverseOrder());
         return counts;
     }
 
-    private static Map<Character, Integer> getMap(String hand) {
-        Map<Character, Integer> charCount =  new LinkedHashMap<>();
+    public static Map<Character, Integer> getMap(String hand, boolean joker) {
+        Map<Character, Integer> occurences = new LinkedHashMap<>();
+        char maxKey = '0';
+        int maxCount = 0;
         for (char c: hand.toCharArray()) {
-            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
-        }
-        return charCount;
-    }
-
-    static int maxSameChar(String hand) {
-        List<Integer> counts = getCounts(hand);
-        return counts.get(0);
-    }
-
-    static List<Integer> findTypes(String hand) {
-        char old =  hand.charAt(0);
-        int same = 0;
-        List<Integer> lcounts =  new ArrayList<>();
-        for(int i=0; i <5; i++) {
-            char current = hand.charAt(i);
-            if (old == current) {
-                same += 1;
-            }
-            else {
-                if (same > 1) { lcounts.add(same); }
-                same = 1;
-                old = current;
+            occurences.put(c, occurences.getOrDefault(c, 0) + 1);
+            if (maxCount < occurences.get(c) && c != 'J') {
+                maxCount = occurences.get(c);
+                if (c != 'J') { maxKey = c ; }
             }
         }
-        if (same > 1) { lcounts.add(same); }
-//        System.out.println(".. " + hand + " lcount " + lcounts);
-        return lcounts;
+
+        if (joker && occurences.containsKey('J') && maxKey != '0') {
+            occurences.put(maxKey, occurences.get(maxKey) + occurences.get('J'));
+            occurences.remove('J');
+        }
+        return occurences;
     }
+
 }
